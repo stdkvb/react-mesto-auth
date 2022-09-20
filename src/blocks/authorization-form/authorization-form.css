@@ -1,0 +1,6 @@
+.authorization-form {
+    width: 358px;
+    display: flex;
+    margin: 60px auto 0 auto;
+    flex-direction: column;
+}
