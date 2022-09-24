@@ -14,6 +14,7 @@ import EditProfilePopup from "./EditProfilePopup";
 import EditAvatarPopup from "./EditAvatarPopup";
 import AddPlacePopup from "./AddPlacePopup";
 import ConfirmationPopup from "./ConfirmationPopup";
+import InfoToolTip from "./InfoTooltip";
 
 function App() {
   const [loggedIn, setLoggedIn] = React.useState(false);
@@ -194,6 +195,8 @@ function App() {
           <ImagePopup
             card={selectedCard}
             onClose={closeAllPopups}
+          />
+          <InfoToolTip
           />
     </CurrentUserContext.Provider>
   );
