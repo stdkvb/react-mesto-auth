@@ -17,7 +17,7 @@ import ConfirmationPopup from "./ConfirmationPopup";
 import InfoToolTip from "./InfoTooltip";
 
 function App() {
-  const [loggedIn, setLoggedIn] = React.useState(false);
+  const [loggedIn, setLoggedIn] = React.useState(true);
   const [currentUser, setCurrentUser] = React.useState({});
   const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] =
     React.useState(false);
@@ -29,7 +29,7 @@ function App() {
     link: "",
   });
   const [cards, setCards] = React.useState([]);
-  const [isLoading, setIsLoading] = React.useState(true);
+  const [isLoading, setIsLoading] = React.useState(false);
 
   React.useEffect(() => {
     api
@@ -154,7 +154,7 @@ function App() {
           <Login />
         </Route>
         <ProtectedRoute
-          exact
+        exact
           path='/'
           component={Main}
           loggedIn={loggedIn}
