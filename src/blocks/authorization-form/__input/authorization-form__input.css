@@ -14,6 +14,12 @@
     color: #CCCCCC;    
 }
 
+@media screen and (max-width: 768px) {
+    .authorization-form__input {
+        width: 260px;
+    } 
+}
+
 .authorization-form__input:focus {
     outline: 0;
     outline-offset: 0;    

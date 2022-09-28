@@ -8,3 +8,10 @@
     text-align: center;
     color: #FFFFFF;
 }
+
+@media screen and (max-width: 768px) {
+    .authorization-form__title {
+        font-size: 20px;
+        line-height: 24px;
+    } 
+}

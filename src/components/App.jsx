@@ -29,7 +29,7 @@ function App() {
     link: "",
   });
   const [cards, setCards] = React.useState([]);
-  const [isLoading, setIsLoading] = React.useState(false);
+  const [isLoading, setIsLoading] = React.useState(true);
 
   React.useEffect(() => {
     api
@@ -154,6 +154,7 @@ function App() {
           <Login />
         </Route>
         <ProtectedRoute
+          exact
           path='/'
           component={Main}
           loggedIn={loggedIn}

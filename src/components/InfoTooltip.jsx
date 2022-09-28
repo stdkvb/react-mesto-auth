@@ -5,7 +5,7 @@ import failIcon from "../images/fail.svg";
 function InfoToolTip() {
 
   return (
-    <div className="popup popup_opened">
+    <div className="popup">
       <div className="popup__container popup__container_no-form">
         <button
           className="popup__close-button"
