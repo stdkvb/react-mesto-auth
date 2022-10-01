@@ -3,9 +3,7 @@ import Authorization from "./Authorization";
 
 function Login(props) {
   return (
-    <Authorization title="Вход"
-                   buttonText="Войти"
-                   onSubmit={props.onLogin} />
+    <Authorization title="Вход" buttonText="Войти" onSubmit={props.onLogin} />
   );
 }
 

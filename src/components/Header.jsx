@@ -1,5 +1,5 @@
 import logo from "../images/logo.svg";
-import { Switch, Route, Link } from 'react-router-dom';
+import { Switch, Route, Link } from "react-router-dom";
 
 function Header(props) {
   return (
@@ -10,22 +10,31 @@ function Header(props) {
           <Switch>
             <Route path="/sign-in">
               <li className="header-nav__item">
-                <Link to="/sign-up" className="header-nav__link">Регистрация</Link>
+                <Link to="/sign-up" className="header-nav__link">
+                  Регистрация
+                </Link>
               </li>
             </Route>
             <Route path="/sign-up">
               <li className="header-nav__item">
-                <Link to="/sign-in" className="header-nav__link">Войти</Link>
+                <Link to="/sign-in" className="header-nav__link">
+                  Войти
+                </Link>
               </li>
             </Route>
             <Route exact path="/">
-                <li className="header-nav__item">{props.email}</li>
-                <li className="header-nav__item">
-                  <Link to="/sign-in" className="header-nav__link" onClick={props.onExit}>Выйти</Link>
-                </li>
+              <li className="header-nav__item">{props.email}</li>
+              <li className="header-nav__item">
+                <Link
+                  to="/sign-in"
+                  className="header-nav__link"
+                  onClick={props.onSignOut}
+                >
+                  Выйти
+                </Link>
+              </li>
             </Route>
           </Switch>
-
         </ul>
       </nav>
     </header>
