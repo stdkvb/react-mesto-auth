@@ -1,23 +1,17 @@
 .authorization-form__login-button {
-        display: block;
-        box-sizing: border-box;
-        width: 358px;
-        min-height: 17px;
-        margin: 15px 0 0 0;
-        padding: 0;
-        background-color: #000000;
-        border: none;
-        border-radius: 2px;
-        color: #FFFFFF;
-        font-style: normal;
-        font-weight: normal;
-        font-size: 14px;
-        line-height: 22px;
+    color: #FFFFFF;
+    text-decoration: none;
+    margin-top: 15px;
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 17px;
+    text-align: center;
 }
 
 @media screen and (max-width: 768px) {
     .authorization-form__login-button {
-        width: 260px;
         line-height: 17px;
     } 
  }

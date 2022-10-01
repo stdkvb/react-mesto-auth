@@ -19,9 +19,9 @@ function Header(props) {
               </li>
             </Route>
             <Route exact path="/">
-                <li className="header-nav__item">email@mail.ru</li>
+                <li className="header-nav__item">{props.email}</li>
                 <li className="header-nav__item">
-                  <Link to="/sign-in" className="header-nav__link">Выйти</Link>
+                  <Link to="/sign-in" className="header-nav__link" onClick={props.onExit}>Выйти</Link>
                 </li>
             </Route>
           </Switch>

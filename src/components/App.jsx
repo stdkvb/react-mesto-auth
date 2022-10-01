@@ -1,8 +1,9 @@
 import React from "react";
-import { Route, Switch, Redirect } from "react-router-dom";
+import { Route, Switch, Redirect, useHistory } from "react-router-dom";
 import "../index.css";
 import { CurrentUserContext } from "../contexts/CurrentUserContext";
 import api from "../utils/api";
+import {register, authorize, getContent} from "../utils/Auth";
 import ProtectedRoute from "./ProtectedRoute";
 import Login from "./Login";
 import Register from "./Register";
@@ -17,7 +18,9 @@ import ConfirmationPopup from "./ConfirmationPopup";
 import InfoToolTip from "./InfoTooltip";
 
 function App() {
-  const [loggedIn, setLoggedIn] = React.useState(true);
+  const [loggedIn, setLoggedIn] = React.useState(false);
+  const [email, setEmail] = React.useState('');
+  const history = useHistory();
   const [currentUser, setCurrentUser] = React.useState({});
   const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] =
     React.useState(false);
@@ -30,24 +33,19 @@ function App() {
   });
   const [cards, setCards] = React.useState([]);
   const [isLoading, setIsLoading] = React.useState(false);
+  const [isInfoTooltipOpen, setInfoTooltipOpen] = React.useState(false);
+  const [successRegister, setSuccessRegister] = React.useState(false);
 
   React.useEffect(() => {
-    api
-      .getInitialCards()
-      .then((cardsData) => {
-        setCards(cardsData);
-      })
-      .catch((err) => console.log(err));
-  }, []);
-
-  React.useEffect(() => {
-    api
-      .getUserInfo()
-      .then((userInfo) => {
+    if(loggedIn) {
+      api.getData()
+        .then(([userInfo, cardsData]) => {
         setCurrentUser(userInfo);
-      })
-      .catch((err) => console.log(err));
-  }, []);
+        setCards(cardsData);
+        })
+        .catch((err) => console.log(err));
+    }
+  }, [loggedIn])
 
   function handleEditAvatarClick() {
     setIsEditAvatarPopupOpen(!isEditAvatarPopupOpen);
@@ -70,6 +68,7 @@ function App() {
     setIsEditProfilePopupOpen(false);
     setIsAddPlacePopupOpen(false);
     setSelectedCard({ name: "", link: "" });
+    setInfoTooltipOpen(false);
   }
 
   const isOpen =isEditAvatarPopupOpen || isEditProfilePopupOpen || isAddPlacePopupOpen || selectedCard.link;
@@ -143,18 +142,75 @@ function App() {
       .finally(() => setIsLoading(false));
   }
 
+  const handleRegisterSubmit = ({email, password}) => {
+    register(email, password)
+      .then(() => {
+        setSuccessRegister(true);
+        setInfoTooltipOpen(true);
+        history.push('/sign-in')
+      })
+      .catch(error => {
+        console.log(`${error.status} - ${error.statusText}`);        
+        setSuccessRegister(false);
+        setInfoTooltipOpen(true);
+      })
+  }
+
+  const handleLoginSubmit = ({email, password}) => {
+    authorize(email, password)
+      .then((data) => {
+        if(data) {
+          setEmail(email);
+          setLoggedIn(true);
+          history.push('/');
+        }
+      })
+      .catch(error => {
+        if (error === 400) {
+          console.log('400 - не передано одно из полей');
+        } else if (error === 401) {
+          console.log('401 - пользователь email не найден');
+        } else {
+          console.log(`${error.status} - ${error.statusText}`);
+        }
+      })
+  }
+
+  const handleExit = () => {
+    localStorage.removeItem('jwt');
+    setLoggedIn(false);
+  }
+
+  React.useEffect(() => {
+    const jwt=localStorage.getItem('jwt');
+    if(jwt) {
+      getContent(jwt)
+        .then((res) => {
+          setEmail(res.data.email);
+          setLoggedIn(true);
+          history.push('/');
+        })
+        .catch(error =>{
+          if(error === 400) {
+            console.log('400 - токен не передан или передан не в том формате');
+          } else if(error === 401) {
+            console.log('401 - переданный токен некорректен');
+          } else {
+            console.log(`${error.status} – ${error.statusText}`);
+          }
+        })
+    }
+  }, [history])
+
   return (
     <CurrentUserContext.Provider value={currentUser}>
-      <Header />
+      <Header
+        onExit = {handleExit}
+        email = {email}
+      />
       <Switch>      
-        <Route path='/sign-up'>
-          <Register />
-        </Route>
-        <Route path='/sign-in'>
-          <Login />
-        </Route>
         <ProtectedRoute
-        exact
+          exact
           path='/'
           component={Main}
           loggedIn={loggedIn}
@@ -166,11 +222,25 @@ function App() {
           onCardLike={handleCardLike}
           onCardDelete={handleCardDelete}
           onAddCard={handleAddCard}
-        />  
+        />
+        <Route path='/sign-up'>
+          <Register
+            onRegister={handleRegisterSubmit}
+          />
+        </Route>
+        <Route path='/sign-in'>
+          <Login
+            onLogin={handleLoginSubmit}
+          />
+        </Route>
+        <Route>
+          {loggedIn ? <Redirect to="/" /> : <Redirect to="/sign-in" />}
+        </Route>
       </Switch>
       <Route exact path="/">
         <Footer />
       </Route>
+
       <EditAvatarPopup
             isOpen={isEditAvatarPopupOpen}
             onClose={closeAllPopups}
@@ -198,6 +268,9 @@ function App() {
             onClose={closeAllPopups}
           />
           <InfoToolTip
+            isOpen={isInfoTooltipOpen}
+            onClose={closeAllPopups}
+            onSuccessRegister={successRegister}
           />
     </CurrentUserContext.Provider>
   );
