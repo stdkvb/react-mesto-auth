@@ -1,6 +1,5 @@
 import React from "react";
 import { Route, Switch, Redirect, useHistory } from "react-router-dom";
-import "../index.css";
 import { CurrentUserContext } from "../contexts/CurrentUserContext";
 import api from "../utils/api";
 import { register, authorize, getContent } from "../utils/Auth";
@@ -171,6 +170,8 @@ function App() {
         }
       })
       .catch((error) => {
+        setSuccessRegister(false);
+        setInfoTooltipOpen(true);
         if (error === 400) {
           console.log("400 - не передано одно из полей");
         } else if (error === 401) {

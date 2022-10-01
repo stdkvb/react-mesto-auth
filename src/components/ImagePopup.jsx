@@ -1,10 +1,6 @@
 function ImagePopup(props) {
-  const isOpen = () => {
-    if (!(props.card.link === "")) {
-      return true;
-    }
-    return false;
-  };
+  
+  const isOpen = () => !!props.card?.link;
 
   return (
     <div

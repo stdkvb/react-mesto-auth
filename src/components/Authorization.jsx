@@ -28,7 +28,7 @@ function Authorization(props) {
       />
       <input
         className="authorization-form__input"
-        type="text"
+        type="password"
         placeholder="Пароль"
         onChange={handleChangePassword}
       />

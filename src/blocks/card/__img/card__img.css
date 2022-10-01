@@ -2,6 +2,7 @@
     width: 282px;
     height: 282px;
     grid-area: img;
+    object-fit: cover;
 }
 
 .card__img:hover {
